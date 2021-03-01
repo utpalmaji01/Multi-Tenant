@@ -1,0 +1,60 @@
+.register-container {
+  .register-body {
+    width: 100%;
+    height: calc(100vh - 65px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .register-body-container {
+      width: 60%;
+      border: 1px solid black;
+      border-radius: 10px;
+      box-sizing: border-box;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .register-body-header {
+        display: flex;
+        align-items: center;
+
+        .register-body-header1 {
+          margin: 0 0 15px 0;
+        }
+      }
+      .register-from {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .register-fname,
+        .register-lname {
+          width: 49%;
+        }
+        .register-company {
+          width: 49%;
+        }
+        .register-phone{
+            width: 49%;
+        }
+        .register-password{
+            width: 89%;
+        }
+        .toggle-password{
+            width: 9%;
+            height: 55px;
+        }
+      }
+      .body-action-button {
+        width: 100%;
+        margin: 20px 0 0;
+        .register-button {
+          text-transform: none;
+          color: #fff;
+          background-color: blue;
+          float: right;
+        }
+      }
+    }
+  }
+}

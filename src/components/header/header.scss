@@ -1,0 +1,29 @@
+.header-comtainer {
+  height: 65px;
+  background-color: aqua;
+  margin: 0 auto;
+  .header-items {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .header-image {
+      display: flex;
+      align-items: center;
+      .header-pic {
+        width: 50px;
+        height: 50px;
+        padding: 5px;
+      }
+    }
+    .header-action-button {
+      .header-register-button,
+      .header-login-button {
+        color: #fff;
+        background-color: blue;
+      }
+    }
+  }
+}
