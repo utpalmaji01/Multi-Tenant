@@ -1,54 +1,50 @@
 import React, { useState } from "react";
 import {
   Button,
-  IconButton,
   TextField,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  InputAdornment,
+  Snackbar,
 } from "@material-ui/core";
-import {
-  VisibilityOff as VisibilityOffIcon,
-  Visibility as VisibilityIcon,
-} from "@material-ui/icons";
+import Alert from "@material-ui/lab/Alert";
 import Header from "../header/Header.jsx";
+import userServices from "../../services/user_services.js";
 import "./register.scss";
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [snackbarActive, setsnackbarActive] = useState(false);
+  const [snackBarSeverity, setSnackBarSeverity] = useState("success");
+  const [snackBarMesage, setsnackBarMesage] = useState("Register successfully");
   const [fname, SetFname] = useState("");
   const [lname, SetLname] = useState("");
   const [email, SetEmail] = useState("");
-  const [address, SetAddress] = useState("");
-  const [company, setCompany] = useState("K12");
+  const [subDomain, setSubDomain] = useState("");
   const [phone, SetPhone] = useState("");
-  const [password, SetPassword] = useState("");
 
   const [fnameHelperText, SetFnameHelperText] = useState(" ");
   const [lnameHelperText, SetLnameHelperText] = useState(" ");
   const [emailHelperText, SetEmailHelperText] = useState(" ");
-  const [addressHelperText, SetAddressHelperText] = useState(" ");
+  const [subDomainHelperText, setSubDomainHelperText] = useState(" ");
   const [phoneHelperText, SetPhoneHelperText] = useState(" ");
-  const [passwordHelperText, SetPasswordHelperText] = useState(" ");
 
   const [fnameFlag, SetFnameFlag] = useState(false);
   const [lnameFlag, SetLnameFlag] = useState(false);
   const [emailFlag, SetEmailFlag] = useState(false);
-  const [addressFlag, SetAddressFlag] = useState(false);
+  const [subDomainFlag, setSubDomainFlag] = useState(false);
   const [phoneFlag, SetPhoneFlag] = useState(false);
-  const [passwordFlag, SetPasswordFlag] = useState(false);
 
   const namePattern = "^[A-Za-z ]{3,}$";
-  const addressPattern = "^[A-Za-z ]{10,}$";
+  const subDomainPattern = "^[A-Za-z ]{3,}$";
   const emailPattern = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
-  const passwordPattern =
-    "(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[*.!@$%^&(){}:;<>,?/~_+=|]).{8,}";
   const mobilePattern = "^[0-9]{10}$";
 
-  const handleChange = (event) => {
-    setCompany(event.target.value);
+
+  const closeSnackbar = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setsnackbarActive(false);
   };
+
   const validate = (e) => {
     console.log(e.target.name);
     if (e.target.name === "fName") {
@@ -96,18 +92,18 @@ const Register = () => {
         }
       }
     }
-    if (e.target.name === "address") {
+    if (e.target.name === "subDomain") {
       if (e.target.value.length === 0) {
-        SetAddressFlag(true);
-        SetAddressHelperText("Require");
+        setSubDomainFlag(true);
+        setSubDomainHelperText("Require");
       } else {
-        if (e.target.value.match(addressPattern)) {
-          SetAddressFlag(false);
-          SetAddressHelperText(" ");
-          SetAddress(e.target.value);
+        if (e.target.value.match(subDomainPattern)) {
+          setSubDomainFlag(false);
+          setSubDomainHelperText(" ");
+          setSubDomain(e.target.value);
         } else {
-          SetAddressFlag(true);
-          SetAddressHelperText("10 or more char.");
+          setSubDomainFlag(true);
+          setSubDomainHelperText("3 or more char.");
         }
       }
     }
@@ -126,32 +122,14 @@ const Register = () => {
         }
       }
     }
-    if (e.target.name === "password") {
-      if (e.target.value.length === 0) {
-        SetPasswordFlag(true);
-        SetPasswordHelperText("Require");
-      } else {
-        if (e.target.value.match(passwordPattern)) {
-          SetPasswordFlag(false);
-          SetPasswordHelperText(" ");
-          SetPassword(e.target.value);
-        } else {
-          SetPasswordFlag(true);
-          SetPasswordHelperText(
-            "Combination of upper and lower case, number & spc. char."
-          );
-        }
-      }
-    }
   };
 
   const checkSignUpAuthentication = () => {
     let fnameLengthFlag = true;
     let lnameLengthFlag = true;
     let emailLengthFlag = true;
-    let addressLengthFlag = true;
+    let subDomainLengthFlag = true;
     let phoneLengthFlag = true;
-    let passwordLengthFlag = true;
 
     if (fname.length < 1) {
       fnameLengthFlag = false;
@@ -168,36 +146,30 @@ const Register = () => {
       SetEmailFlag(true);
       SetEmailHelperText("Require");
     }
-    if (address.length < 1) {
-      addressLengthFlag = false;
-      SetAddressFlag(true);
-      SetAddressHelperText("Require");
+    if (subDomain.length < 1) {
+      subDomainLengthFlag = false;
+      setSubDomainFlag(true);
+      setSubDomainHelperText("Require");
     }
     if (phone.length < 1) {
       phoneLengthFlag = false;
       SetPhoneFlag(true);
       SetPhoneHelperText("Require");
     }
-    if (password.length < 1) {
-      passwordLengthFlag = false;
-      SetPasswordFlag(true);
-      SetPasswordHelperText("Require");
-    }
     if (
       fnameLengthFlag &&
       lnameLengthFlag &&
       emailLengthFlag &&
-      addressLengthFlag &&
       phoneLengthFlag &&
-      passwordLengthFlag
+      subDomainLengthFlag
     ) {
       if (
         !fnameFlag &&
         !lnameFlag &&
         !emailFlag &&
-        !addressFlag &&
         !phoneFlag &&
-        !passwordFlag
+        !subDomainFlag
+        // !passwordFlag
       ) {
         return true;
       } else {
@@ -211,16 +183,32 @@ const Register = () => {
   const register = () => {
     if (checkSignUpAuthentication()) {
       let signUpObj = {
-        fullName: fname + " " + lname,
-        email: email,
-        address: address,
-        password: password,
+        name: fname + " " + lname,
+        email_id: email,
+        sub_domain: subDomain + ".k12.com",
+        // password: password,
         phone: phone,
-        company: company,
+        // company: company,
       };
       console.log(signUpObj);
+      userServices
+        .newUserSignUp(signUpObj)
+        .then((responce) => {
+          console.log(responce);
+          if (responce.status === 200) {
+            setsnackbarActive(true);
+          setSnackBarSeverity("success");
+          setsnackBarMesage("Register successfully");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setsnackbarActive(true);
+          setSnackBarSeverity("error");
+          setsnackBarMesage("Some error occoured");
+        });
     } else {
-        console.log("hello");
+      console.log("validation not proper");
     }
   };
 
@@ -278,7 +266,7 @@ const Register = () => {
                 onBlur={validate}
                 className="register-email"
               />
-              <TextField
+              {/* <TextField
                 fullWidth
                 multiline
                 rowsMax={4}
@@ -293,9 +281,9 @@ const Register = () => {
                 onChange={(e) => SetAddress(e.target.value)}
                 onBlur={validate}
                 className="register-address"
-              />
+              /> */}
 
-              <FormControl
+              {/* <FormControl
                 variant="outlined"
                 margin="dense"
                 className="register-company"
@@ -306,7 +294,7 @@ const Register = () => {
                   <MenuItem value="Orchids">Orchids</MenuItem>
                   <MenuItem value="AOL">Always On Learning</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
               <TextField
                 required
                 variant="outlined"
@@ -324,6 +312,26 @@ const Register = () => {
                 required
                 variant="outlined"
                 margin="dense"
+                label="Sub-domain"
+                name="subDomain"
+                className="sub-domain"
+                error={subDomainFlag}
+                helperText={subDomainHelperText}
+                value={subDomain}
+                onChange={(e) => setSubDomain(e.target.value)}
+                onBlur={validate}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">.k12.com</InputAdornment>
+                  ),
+                }}
+              />
+
+              {/* <TextField
+                fullWidth
+                required
+                variant="outlined"
+                margin="dense"
                 label="Password"
                 name="password"
                 value={password}
@@ -333,16 +341,27 @@ const Register = () => {
                 onChange={(e) => SetPassword(e.target.value)}
                 onBlur={validate}
                 className="register-password"
-              />
-              <IconButton
-                size="small"
-                onClick={() => {
-                  setShowPassword(!showPassword);
+                InputProps={{
+                  // <-- toggle button is added.
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                        className="toggle-password"
+                      >
+                        {showPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
-                className="toggle-password"
-              >
-                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-              </IconButton>
+              /> */}
             </div>
 
             <div className="body-action-button">
@@ -358,6 +377,15 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={snackbarActive}
+        autoHideDuration={5000}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity={snackBarSeverity}>
+          {snackBarMesage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

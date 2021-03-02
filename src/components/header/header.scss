@@ -1,7 +1,10 @@
 .header-comtainer {
   height: 65px;
-  background-color: aqua;
+  background-color: inherit;
   margin: 0 auto;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
   .header-items {
     width: 80%;
     height: 100%;
@@ -16,6 +19,9 @@
         width: 50px;
         height: 50px;
         padding: 5px;
+      }
+      .company-name{
+        font-family: 'Lato', sans-serif;
       }
     }
     .header-action-button {

@@ -107,18 +107,18 @@ const LogIn = () => {
         return false;
       }
     } else {
-        return false;
+      return false;
     }
   };
 
   const logIn = () => {
     if (checkLogInAuthentication()) {
-        let logInObj = {
-            domain: domainName,
-            email: email,
-            password: password
-        };
-        console.log(logInObj);
+      let logInObj = {
+        domain: domainName,
+        email: email,
+        password: password,
+      };
+      console.log(logInObj);
     }
   };
   return (
@@ -130,10 +130,10 @@ const LogIn = () => {
         <div className="login-body">
           <div className="login-body-container">
             <Typography variant="h5" className="login-body-header1">
-              Login to Multi Tenant Application
+              Admin Login
             </Typography>
             <Typography variant="h6" className="login-body-header2">
-              Find Out Your Domain
+              Find Out Your Domain First
             </Typography>
             <TextField
               fullWidth
@@ -148,7 +148,7 @@ const LogIn = () => {
               onChange={(e) => setDomainName(e.target.value)}
               onBlur={validate}
               className="domain-name"
-            ></TextField>
+            />
             <TextField
               fullWidth
               required
@@ -162,7 +162,7 @@ const LogIn = () => {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={validate}
               className="login-email"
-            ></TextField>
+            />
             <div className="login-password-area">
               <TextField
                 fullWidth

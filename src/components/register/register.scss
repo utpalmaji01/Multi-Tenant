@@ -6,20 +6,23 @@
     justify-content: center;
     align-items: center;
     .register-body-container {
-      width: 60%;
-      border: 1px solid black;
+      width: 35%;
       border-radius: 10px;
       box-sizing: border-box;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+      -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+      -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
       .register-body-header {
         display: flex;
         align-items: center;
 
         .register-body-header1 {
           margin: 0 0 15px 0;
+          font-family: 'Lato', sans-serif;
         }
       }
       .register-from {
@@ -31,19 +34,17 @@
         .register-lname {
           width: 49%;
         }
-        .register-company {
+        .sub-domain {
           width: 49%;
         }
         .register-phone{
             width: 49%;
         }
-        .register-password{
-            width: 89%;
-        }
-        .toggle-password{
-            width: 9%;
-            height: 55px;
-        }
+        
+        // .toggle-password{
+        //     width: 9%;
+        //     height: 55px;
+        // }
       }
       .body-action-button {
         width: 100%;
